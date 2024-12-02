@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "customers")
+@Table(name = "CUSTOMER")
 public class Customer implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Customer_Gen")
