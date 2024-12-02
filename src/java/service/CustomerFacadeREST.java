@@ -63,7 +63,7 @@ public class CustomerFacadeREST {
 
         // Actualitza els camps permesos
         customer.setUsername(updatedCustomer.getUsername());
-        customer.setAuthor(updatedCustomer.isAuthor());
+        customer.setIsAuthor(updatedCustomer.getIsAuthor());
         customer.setArticles(updatedCustomer.getArticles());
         // No actualitzem la contrasenya sense validació.
 
