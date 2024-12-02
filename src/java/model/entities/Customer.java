@@ -5,7 +5,6 @@
 package model.entities;
 
 import jakarta.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,19 +14,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
-public class Customer implements Serializable{
+public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Customer_Gen")
-    @SequenceGenerator(name = "Customer_Gen", sequenceName = "CUSTOMER_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USERNAME", nullable = false, unique = true, length = 50) // Nom d'usuari únic.
+    @Column(nullable = false, unique = true, length = 50) // Nom d'usuari únic.
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false) // Contrasenya de l'usuari (ha de ser hasheada).
+    @Column(nullable = false) // Contrasenya de l'usuari (ha de ser hasheada).
     private String password;
 
-    @Column(name = "IS_AUTHOR", nullable = false) // Indica si l'usuari es autor.
+    @Column(nullable = false) // Indica si l'usuari es autor.
     private boolean isAuthor;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL) // Relació amb artícles.
@@ -43,8 +41,8 @@ public class Customer implements Serializable{
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public boolean getIsAuthor() { return isAuthor; }
-    public void setIsAuthor(boolean isAuthor) { this.isAuthor = isAuthor; }
+    public boolean isAuthor() { return isAuthor; }
+    public void setAuthor(boolean isAuthor) { this.isAuthor = isAuthor; }
 
     public List<Article> getArticles() { return articles; }
     public void setArticles(List<Article> articles) { this.articles = articles; }
