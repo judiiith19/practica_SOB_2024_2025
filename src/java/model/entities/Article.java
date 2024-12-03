@@ -5,39 +5,53 @@
 package model.entities;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 /**
  *
  * @author JUDITH
  */
-public class Article {
+
+@Entity
+@Table(name = "ARTICLE")
+@NamedQueries({
+    @NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a"),
+    @NamedQuery(name = "Article.findByTopicOrAuthor", query = "SELECT a FROM Article a WHERE (:topic IS NULL OR :topic MEMBER OF a.topics) AND (:author IS NULL OR a.author = :author)")
+})
+public class Article implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Article_Gen")
+    @SequenceGenerator(name = "Article_Gen", sequenceName = "ARTICLE_SEQ", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false, length = 100) // Títol de l'artícle, máx 100 caracters.
+    @Column(name = "TITLE", nullable = false, length = 100) // Títol de l'artícle, máx 100 caracters.
     private String title;
-
-    @Column(nullable = false) // Nom de l'autor.
-    private String author;
-
-    @Column(nullable = false, columnDefinition = "TEXT") // Contingut complet de l'artícle.
+    
+    @Column(name = "CONTENT", nullable = false, columnDefinition = "TEXT", length = 500) // Contingut complet de l'artícle.
     private String content;
-
+    
+    @Column(name = "PUBLISHED_DATE", nullable = false)
     @Temporal(TemporalType.TIMESTAMP) // Data de publicació amb l' hora.
     private Date publishedDate;
 
-    @Column(nullable = false) // Num visualitzacions.
-    private int views = 0;
+    @Column(name = "AUTHOR", nullable = false) // Nom de l'autor.
+    private String author;
 
-    @ElementCollection // Llista de tópics asociats a l'artícle.
+    @Column(name = "VIEWS", nullable = false) // Num visualitzacions.
+    private Integer views = 0;
+
+    @ElementCollection
     @CollectionTable(name = "article_topics", joinColumns = @JoinColumn(name = "article_id"))
-    @Column(name = "topic")
-    private List<String> topics;
+    @Column(name = "TOPIC")
+    private List<String> topics = new ArrayList<>();
 
-    @Column(nullable = false) // Indica si l'artícle es públic.
-    private boolean isPublic;
+    @Column(name = "IS_PUBLIC",nullable = false) // Indica si l'artícle es públic.
+    private Boolean isPublic;
     
     //Getters i setters
 
@@ -46,15 +60,15 @@ public class Article {
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+    
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+    
+    public Date getPublishedDate() { return publishedDate; }
+    public void setPublishedDate(Date publishedDate) { this.publishedDate = publishedDate; }
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public Date getPublishedDate() { return publishedDate; }
-    public void setPublishedDate(Date publishedDate) { this.publishedDate = publishedDate; }
 
     public int getViews() { return views; }
     public void setViews(int views) { this.views = views; }
